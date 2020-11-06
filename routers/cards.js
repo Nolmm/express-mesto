@@ -1,24 +1,17 @@
 const path = require('path');
-const pathToData = path.join(__dirname, '..', 'data', 'cards.json')
-const readFile = require('../utils/read-file.js')
 
-
+const pathToData = path.join(__dirname, '..', 'data', 'cards.json');
 const router = require('express').Router();
+const readFile = require('../utils/read-file.js');
+
 const cards = (req, res) => readFile(pathToData)
-  .then(data => res
+  .then((data) => res
     .status(200)
     .send(data))
-  .catch(err => {
-    res.status(404).send({ "message": "Запрашиваемый ресурс не найден" })
-  })
-
-router.use('/cards', cards)
-
+  .catch(() => {
+    res.status(500).send({ message: 'Запрашиваемый ресурс не найден' });
+  });
+router.use('/cards', cards);
 module.exports = {
-  cardRouter: router
-}
-
-
-
-
-
+  cardRouter: router,
+};
