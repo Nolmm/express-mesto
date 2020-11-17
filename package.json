@@ -6,8 +6,6 @@
   "scripts": {
     "start": "nodemon app.js",
     "dev": "nodemon app.js"
-
-
   },
   "repository": {
     "type": "git",
@@ -21,7 +19,8 @@
   },
   "homepage": "https://github.com/Nolmm/express-mesto#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.10.14"
   },
   "devDependencies": {
     "eslint": "^7.12.1",
