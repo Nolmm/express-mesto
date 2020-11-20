@@ -1,17 +1,11 @@
-const path = require('path');
-
-const pathToData = path.join(__dirname, '..', 'data', 'cards.json');
 const router = require('express').Router();
-const readFile = require('../utils/read-file.js');
 
-const cards = (req, res) => readFile(pathToData)
-  .then((data) => res
-    .status(200)
-    .send(data))
-  .catch(() => {
-    res.status(500).send({ message: 'Запрашиваемый ресурс не найден' });
-  });
-router.use('/cards', cards);
+const { getCards, createCard, deleteCard } = require('../controllers/cards');
+
+router.get('/cards', getCards);
+router.post('/cards', createCard);
+router.delete('/cards/:_id', deleteCard);
+
 module.exports = {
   cardRouter: router,
 };
