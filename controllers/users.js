@@ -21,9 +21,15 @@ const getUser = (req, res) => {
     });
 };
 // eslint-disable-next-line max-len
-const createUser = (req, res) => User.countDocuments().then((count) => User.create({ count, ...req.body })
+const createUser = (req, res) => User.create(req.body)
   .then((user) => res.status(200).send(user))
-  .catch((err) => res.status(500).send(err)));
+  .catch((err) => {
+    if (err.name === 'ValidationError') {
+      res.status(400).send({ message: 'Некорректный запрос' });
+    } else {
+      res.status(500).send({ message: 'Ошибка!' });
+    }
+  });
 
 module.exports = {
   getUsers,

@@ -13,18 +13,25 @@ const getCards = (req, res) => {
 const createCard = (req, res) => {
   Card.create({ owner: req.user._id, ...req.body })
     .then((card) => res.status(200).send(card))
-    .catch((err) => res.status(500).send(err));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Некорректный запрос' });
+      } else {
+        res.status(500).send({ message: 'Ошибка!' });
+      }
+    });
 };
 const deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params._id)
-    .orFail(new Error('NotValidId'))
+    .orFail(new Error('NotValidId', 'Карточка не найдена'))
     .then((card) => res.status(200).send(card))
     // eslint-disable-next-line consistent-return
     .catch((err) => {
-      if (err.message === 'NotValidId') {
-        return res.status(404).send({ message: 'Карточка не найдена' });
-      }
-      res.status(500).send({ message: 'Ошибка!' });
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Некорректные данные' });
+      } else if (err.name === 'NotValidId') {
+        res.status(404).send({ message: 'Карточка не найдена' });
+      } else res.status(500).send({ message: 'Ошибка!' });
     });
 };
 
